@@ -1,21 +1,30 @@
-export const createPopupTemplate = (film) => {
-  const {
-    poster, title, description, totalRating, releaseDate, runtime, genres, comments, age, director, writers, actors, country
-  } = film;
+import {
+  createElement
+} from "../utils";
+export default class Popup {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
 
-  const renderGenres = () => {
-    let result = [];
-    for (let i = 0; i < genres.length; i++) {
-      result.push(`<span class="film-details__genre">${genres[i]}</span>`);
-    }
+  getTemplate() {
+    const {
+      poster, title, description, totalRating, releaseDate, runtime, genre, comments, age, director, writers, actors, country
+    } = this._film;
 
-    return result.join(` `);
-  };
+    const renderGenres = () => {
+      let result = [];
+      for (let i = 0; i < genre.length; i++) {
+        result.push(`<span class="film-details__genre">${genre[i]}</span>`);
+      }
 
-  const renderComments = () => {
-    let result = [];
-    for (let i = 0; i < comments.length; i++) {
-      result.push(`
+      return result.join(` `);
+    };
+
+    const renderComments = () => {
+      let result = [];
+      for (let i = 0; i < comments.length; i++) {
+        result.push(`
       <li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${comments[i].emoji}.png" width="55" height="55" alt="emoji-${comments[i].emoji}">
@@ -29,29 +38,11 @@ export const createPopupTemplate = (film) => {
           </p>
         </div>
       </li>`);
-    }
-    return result.join(` `);
-  };
+      }
+      return result.join(` `);
+    };
 
-
-  /*
-   <li class="film-details__comment">
-              <span class="film-details__comment-emoji">
-                <img src="./images/emoji/puke.png" width="55" height="55" alt="emoji-puke">
-              </span>
-              <div>
-                <p class="film-details__comment-text">Very very old. Meh</p>
-                <p class="film-details__comment-info">
-                  <span class="film-details__comment-author">John Doe</span>
-                  <span class="film-details__comment-day">2 days ago</span>
-                  <button class="film-details__comment-delete">Delete</button>
-                </p>
-              </div>
-            </li>
-  */
-
-  return (
-    `<section class="film-details">
+    return `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
         <div class="form-details__top-container">
         <div class="film-details__close">
@@ -103,9 +94,8 @@ export const createPopupTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Genres</td>
-              <td class="film-details__cell">
-              ${renderGenres()}
-              </tr>
+              <td class="film-details__cell">${renderGenres()}</td>
+            </tr>
           </table>
 
             <p class="film-details__film-description">
@@ -159,13 +149,25 @@ export const createPopupTemplate = (film) => {
 
             <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
             <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-            </label>
-          </div>
+                 <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
+                </label>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
-    </div>
-  </form>
-</section>`
-  );
-};
+      </form>
+    </section>`;
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

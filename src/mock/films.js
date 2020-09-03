@@ -104,7 +104,7 @@ export const generateMockFilm = () => {
     totalRating: getRandomRating(),
     releaseDate: getRandomDate(),
     runtime: getRandomRuntime(),
-    genres: getRandomGenres(),
+    genre: getRandomGenres(),
     comments: new Array(getRandomInteger(1, 5)).fill().map(getRandomComment),
     age: `${getRandomElement(ages)}+`,
     director: getRandomElement(people),
