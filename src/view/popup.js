@@ -1,10 +1,22 @@
+import Abstract from './abstract';
 import {
-  createElement
-} from "../utils";
-export default class Popup {
+  humanizeTaskDueDate
+} from '../utils/films';
+export default class Popup extends Abstract {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
+    this._closePopupHandler = this._closePopupHandler.bind(this);
+  }
+
+  _closePopupHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+  setClosePopupHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closePopupHandler);
   }
 
   getTemplate() {
@@ -82,7 +94,7 @@ export default class Popup {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${releaseDate}</td>
+              <td class="film-details__cell">${humanizeTaskDueDate(releaseDate)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -157,17 +169,5 @@ export default class Popup {
         </div>
       </form>
     </section>`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,10 +1,22 @@
+import Abstract from './abstract';
 import {
-  createElement
-} from "../utils";
-export default class Film {
+  humanizeTaskDueDate
+} from '../utils/films';
+export default class Film extends Abstract {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
+    this._clickHandler = this._clickHandler.bind(this);
+  }
+
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`img`).addEventListener(`click`, this._clickHandler);
   }
 
   getTemplate() {
@@ -16,7 +28,7 @@ export default class Film {
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${totalRating}</p>
       <p class="film-card__info">
-        <span class="film-card__year">${releaseDate}</span>
+        <span class="film-card__year">${humanizeTaskDueDate(releaseDate)}</span>
         <span class="film-card__duration">${runtime}</span>
         <span class="film-card__genre">${genre.join(` `)}</span>
       </p>
@@ -29,17 +41,5 @@ export default class Film {
         <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
       </form>
     </article>`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
