@@ -1,6 +1,6 @@
 import {
   getRandomInteger
-} from "../utils.js";
+} from '../utils/common';
 
 const postersPathes = [
   `made-for-each-other.png`,
@@ -56,7 +56,7 @@ const getRandomRating = () => {
 };
 
 const getRandomDate = () => {
-  return `01 April ${getRandomInteger(1929, 1948)}`;
+  return new Date(getRandomInteger(1929, 1948), 3, 1, 0, 0, 0, 0);
 };
 
 const getRandomRuntime = () => {
