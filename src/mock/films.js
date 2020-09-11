@@ -92,11 +92,14 @@ const getRandomComment = () => {
   };
 };
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 export const generateMockFilm = () => {
   const poster = `./images/posters/${getRandomElement(postersPathes)}`;
   const title = getTitleOfFilm(poster);
 
   return {
+    id: generateId(),
     poster,
     title,
     // originalTitle,
@@ -106,6 +109,12 @@ export const generateMockFilm = () => {
     runtime: getRandomRuntime(),
     genre: getRandomGenres(),
     comments: new Array(getRandomInteger(1, 5)).fill().map(getRandomComment),
+    currentComment: {
+      comment: null,
+      emoji: null,
+      author: null,
+      day: null
+    },
     age: `${getRandomElement(ages)}+`,
     director: getRandomElement(people),
     writers: `${getRandomElement(people)} ${getRandomElement(people)}`,

@@ -5,9 +5,8 @@ import FilmsListExtra from '../view/films-list-extra';
 import FilmsListMost from '../view/films-list-most';
 import Sort from '../view/sort';
 import NoFilm from '../view/no-films';
-import Film from '../view/film-card';
-import Popup from '../view/popup';
 import ShowMoreButton from '../view/show-more-button';
+import FilmPresenter from './film-card';
 import {
   render,
   remove
@@ -17,16 +16,12 @@ import {
   sortFilmByRating
 } from '../utils/films';
 import {
-  SortType
+  updateItem
+} from '../utils/common';
+import {
+  SortType,
+  FilmSettings
 } from '../const';
-
-export const FilmSettings = {
-  PER_STEP: 5,
-  EXTRA_COUNT: 2,
-  MOST_COUNT: 2,
-};
-const body = document.querySelector(`body`);
-
 export default class FilmSection {
   constructor(container) {
     this.filmSectionContainer = container;
@@ -45,17 +40,34 @@ export default class FilmSection {
     this._sortComponent = new Sort();
     this._noFilmComponent = new NoFilm();
     this._showMoreButtonComponent = new ShowMoreButton();
+    this._filmPresenter = {};
 
+    this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
-  init(films) {
+  init(films, filmsExtra, filmsMost) {
     this._films = films.slice();
     this._sourcedFilms = films.slice();
+    this._filmsExtra = filmsExtra.slice();
+    this._filmsMost = filmsMost.slice();
 
     render(this.filmSectionContainer, this._filmsComponent);
     this._renderFilmSection();
+  }
+
+  _handleModeChange() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
+  _handleFilmChange(updatedFilm) {
+    this._films = updateItem(this._films, updatedFilm);
+    this._sourcedFilms = updateItem(this._sourcedFilms, updatedFilm);
+    this._filmPresenter[updatedFilm.id].init(updatedFilm);
   }
 
   _renderSort() {
@@ -65,39 +77,29 @@ export default class FilmSection {
   }
 
   _clearFilmList() {
-    this._filmsListMainContainerComponent.getElement().innerHTML = ``;
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._filmPresenter = {};
     this._renderedFilmCount = FilmSettings.PER_STEP;
   }
 
   _renderFilm(container, film) {
-    const filmComponent = new Film(film);
-    const filmPopupComponent = new Popup(film);
+    const filmPresenter = new FilmPresenter(container, this._handleFilmChange, this._handleModeChange);
+    filmPresenter.init(film);
 
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        evt.preventDefault();
-        remove(filmPopupComponent);
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    filmComponent.setClickHandler(() => {
-      render(body, filmPopupComponent);
-      document.addEventListener(`keydown`, onEscKeyDown);
-
-      filmPopupComponent.setClosePopupHandler(() => {
-        remove(filmPopupComponent);
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      });
-    });
-
-    render(container, filmComponent);
+    this._filmPresenter[film.id] = filmPresenter;
   }
 
   _renderFilms(container, from, to) {
     this._films
       .slice(from, to)
       .forEach((film) => this._renderFilm(container, film));
+  }
+
+  _renderFilmNoMain(container, film) {
+    const filmPresenter = new FilmPresenter(container);
+    filmPresenter.init(film);
   }
 
   _renderNoFilm() {
@@ -146,12 +148,16 @@ export default class FilmSection {
 
   _renderFilmsExtra() {
     render(this._filmsListExtra, this._filmsListExtraContainer);
-    this._renderFilms(this._filmsListExtraContainer, 0, this._renderedFilmExtraCount);
+    this._filmsExtra
+      .slice(0, this._renderedFilmExtraCount)
+      .forEach((film) => this._renderFilmNoMain(this._filmsListExtraContainer, film));
   }
 
   _renderFilmsMost() {
     render(this._filmsListMost, this._filmsListMostContainer);
-    this._renderFilms(this._filmsListMostContainer, 0, this._renderedFilmMostCount);
+    this._filmsMost
+      .slice(0, this._renderedFilmMostCount)
+      .forEach((film) => this._renderFilmNoMain(this._filmsListMostContainer, film));
   }
 
   _sortFilms(sortType) {

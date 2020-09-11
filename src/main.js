@@ -8,9 +8,13 @@ import {
 import {
   render,
 } from './utils/render';
+import {
+  FilmSettings
+} from './const';
 
-const FILMS_COUNT = 9;
-const mockFilmList = new Array(FILMS_COUNT).fill().map(generateMockFilm);
+const mockFilmList = new Array(FilmSettings.FILMS_COUNT).fill().map(generateMockFilm);
+const mockFilmExtraList = new Array(FilmSettings.EXTRA_COUNT).fill().map(generateMockFilm);
+const mockFilmMostList = new Array(FilmSettings.MOST_COUNT).fill().map(generateMockFilm);
 
 const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
@@ -23,7 +27,7 @@ const menu = new Menu(mockFilmList);
 render(main, menu);
 
 const filmSection = new FilmSection(main);
-filmSection.init(mockFilmList);
+filmSection.init(mockFilmList, mockFilmExtraList, mockFilmMostList);
 
-const footerStat = new Stat(FILMS_COUNT);
+const footerStat = new Stat(FilmSettings.FILMS_COUNT);
 render(footerStatContainer, footerStat);
