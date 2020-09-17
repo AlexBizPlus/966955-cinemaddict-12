@@ -39,3 +39,12 @@ export const sortFilmByRating = (FilmA, FilmB) => {
 
   return FilmB.totalRating - FilmA.totalRating;
 };
+
+export const sortFilmByComments = (FilmA, FilmB) => {
+  const weight = getWeightForNullDate(FilmA.comments.length, FilmB.comments.length);
+
+  if (weight !== null) {
+    return weight;
+  }
+  return FilmB.comments.length - FilmA.comments.length;
+};

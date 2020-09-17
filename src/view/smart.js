@@ -10,6 +10,22 @@ export default class Smart extends Abstract {
     this.updateElement();
   }
 
+  updateComments(update) {
+    if (!update) {
+      return;
+    }
+    this._data.comments.push(update);
+    this.updateElement();
+  }
+
+  deleteComment(index) {
+    this._data.comments = [
+      ...this._data.comments.slice(0, index),
+      ...this._data.comments.slice(index + 1)
+    ];
+    this.updateElement();
+  }
+
   updateElement() {
     let prevElement = this.getElement();
     const parent = prevElement.parentElement;

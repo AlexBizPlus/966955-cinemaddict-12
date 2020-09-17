@@ -6,8 +6,9 @@ import {
   replace
 } from '../utils/render';
 import {
-  isEscPressed
-} from "../utils/common";
+  UserAction,
+  UpdateType
+} from "../const.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -73,7 +74,7 @@ export default class FilmCard {
   }
 
   _escKeyDownHandler(evt) {
-    if (isEscPressed) {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._removefilmPopupComponent();
       this._filmPopupComponent.reset(this._film);
@@ -91,23 +92,23 @@ export default class FilmCard {
 
   _handlePopupCloseClick(film) {
     this._removefilmPopupComponent();
-    this._changeData(Object.assign({}, film));
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, film));
   }
 
   _handleWatchlistClick() {
-    this._changeData(Object.assign({}, this._film, {
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {
       isWatchlist: !this._film.isWatchlist
     }));
   }
 
   _handleHistoryClick() {
-    this._changeData(Object.assign({}, this._film, {
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {
       isHistory: !this._film.isHistory
     }));
   }
 
   _handleFavoritesClick() {
-    this._changeData(Object.assign({}, this._film, {
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {
       isFavorites: !this._film.isFavorites
     }));
   }

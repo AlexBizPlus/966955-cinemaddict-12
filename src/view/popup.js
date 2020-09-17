@@ -1,3 +1,4 @@
+import he from "he";
 import {
   humanizeTaskDueDate
 } from '../utils/films';
@@ -5,6 +6,7 @@ import {
   EMOJIS
 } from "../const";
 import SmartView from "./smart.js";
+// import { now } from 'moment';
 // import flatpickr from "flatpickr";
 
 // import "../../node_modules/flatpickr/dist/flatpickr.min.css";
@@ -18,6 +20,8 @@ export default class Popup extends SmartView {
     this._addHistoryHandler = this._addHistoryHandler.bind(this);
     this._addFavoritesHandler = this._addFavoritesHandler.bind(this);
     this._addEmojiHandler = this._addEmojiHandler.bind(this);
+    this._addCommentHandler = this._addCommentHandler.bind(this);
+    this._removeCommentHandler = this._removeCommentHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -43,6 +47,14 @@ export default class Popup extends SmartView {
     this.getElement()
       .querySelector(`.film-details__emoji-list`)
       .addEventListener(`change`, this._addEmojiHandler);
+
+    this.getElement()
+      .querySelector(`.film-details__comment-input`)
+      .addEventListener(`keydown`, this._addCommentHandler);
+
+    this.getElement()
+      .querySelector(`.film-details__comments-list`)
+      .addEventListener(`click`, this._removeCommentHandler);
   }
 
   _addWatchlistHandler(evt) {
@@ -73,6 +85,25 @@ export default class Popup extends SmartView {
         emoji: evt.target.value
       })
     });
+  }
+
+  _addCommentHandler(evt) {
+    if ((evt.ctrlKey || evt.metaKey) && (evt.keyCode === 13 || evt.keyCode === 10)) {
+      evt.preventDefault();
+      this.updateComments(Object.assign({}, this._data.currentComment, {
+        comment: evt.target.value,
+        day: `today`
+      }));
+
+    }
+  }
+
+  _removeCommentHandler(evt) {
+    if (evt.target.tagName !== `BUTTON`) {
+      return;
+    }
+    evt.preventDefault();
+    this.deleteComment(evt.target.dataset.commentNumber);
   }
 
   _closePopupHandler(evt) {
@@ -123,17 +154,21 @@ export default class Popup extends SmartView {
     const renderComments = () => {
       let result = [];
       for (let i = 0; i < comments.length; i++) {
+        const emojiTest = (comments[i].emoji === null)
+          ? ``
+          : `src="./images/emoji/${comments[i].emoji}.png" alt="emoji-${comments[i].emoji}" `;
+
         result.push(`
       <li class="film-details__comment">
         <span class="film-details__comment-emoji">
-          <img src="./images/emoji/${comments[i].emoji}.png" width="55" height="55" alt="emoji-${comments[i].emoji}">
+          <img ${emojiTest}" width="55" height="55">
         </span>
         <div>
           <p class="film-details__comment-text">${comments[i].comment}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comments[i].author}</span>
             <span class="film-details__comment-day">${comments[i].day}</span>
-            <button class="film-details__comment-delete">Delete</button>
+            <button type="button" class="film-details__comment-delete" data-comment-number="${i}">Delete</button>
           </p>
         </div>
       </li>`);
