@@ -1,3 +1,7 @@
+export const SHAKE_ANIMATION_TIMEOUT = 600;
+
+export const EMOJIS = [`smile`, `sleeping`, `puke`, `angry`];
+
 export const SortType = {
   DEFAULT: `default`,
   BY_DATE: `by-date`,
@@ -10,8 +14,6 @@ export const FilmSettings = {
   EXTRA_COUNT: 2,
   MOST_COUNT: 2,
 };
-
-export const EMOJIS = [`smile`, `sleeping`, `puke`, `angry`];
 
 export const UserAction = {
   UPDATE_FILM: `UPDATE_FILM`,
@@ -42,6 +44,11 @@ export const ProfileRating = {
   NOVICE: `novice`,
   FAN: `fan`,
   MOVIE_BUFF: `movie buff`
+};
+
+export const BackendValues = {
+  AUTHORIZATION: `Basic kay9g03aazae171q`,
+  END_POINT: `https://12.ecmascript.pages.academy/cinemaddict`
 };
 
 export const header = document.querySelector(`.header`);

@@ -90,11 +90,13 @@ export default class Popup extends SmartView {
   _addCommentHandler(evt) {
     if ((evt.ctrlKey || evt.metaKey) && (evt.keyCode === 13 || evt.keyCode === 10)) {
       evt.preventDefault();
-      this.updateComments(Object.assign({}, this._data.currentComment, {
+      const newComment = Object.assign({}, this._data.currentComment, {
         comment: evt.target.value,
-        day: `today`
-      }));
+        day: `2020-09-18T16:12:32.554Z`
+      });
+      console.log(evt.target);
 
+      this.updateComments(newComment);
     }
   }
 
@@ -104,6 +106,8 @@ export default class Popup extends SmartView {
     }
     evt.preventDefault();
     this.deleteComment(evt.target.dataset.commentNumber);
+    evt.target.setAttribute(`disabled`, `disabled`);
+    evt.target.innerText = `Deleting...`;
   }
 
   _closePopupHandler(evt) {
@@ -118,7 +122,7 @@ export default class Popup extends SmartView {
 
   getTemplate() {
     const {
-      poster, title, description, totalRating, releaseDate, runtime, genre,
+      poster, title, alternativeTitle, description, totalRating, releaseDate, runtime, genre,
       comments, currentComment, age, director, writers, actors, country,
       isWatchlist, isHistory, isFavorites
     } = this._data;
@@ -168,7 +172,7 @@ export default class Popup extends SmartView {
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comments[i].author}</span>
             <span class="film-details__comment-day">${comments[i].day}</span>
-            <button type="button" class="film-details__comment-delete" data-comment-number="${i}">Delete</button>
+            <button type="button" class="film-details__comment-delete" data-comment-number="${comments[i].id}-${i}">Delete</button>
           </p>
         </div>
       </li>`);
@@ -197,7 +201,7 @@ export default class Popup extends SmartView {
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">Original: ${title}</p>
+              <p class="film-details__title-original">Original: ${alternativeTitle}</p>
             </div>
 
             <div class="film-details__rating">
@@ -284,9 +288,9 @@ export default class Popup extends SmartView {
     </section>`;
   }
 
-  reset(film) {
-    this.updateData(Popup.parseFilmToData(film));
-  }
+  // reset(film) {
+  //   this.updateData(Popup.parseFilmToData(film));
+  // }
 
   static parseFilmToData(film) {
     return Object.assign({}, film);

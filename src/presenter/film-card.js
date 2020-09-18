@@ -7,8 +7,12 @@ import {
 } from '../utils/render';
 import {
   UserAction,
-  UpdateType
+  UpdateType,
+  BackendValues
 } from "../const.js";
+import Api from "../api.js";
+
+const api = new Api(BackendValues.END_POINT, BackendValues.AUTHORIZATION);
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -16,7 +20,6 @@ const Mode = {
 };
 
 const body = document.querySelector(`body`);
-
 export default class FilmCard {
   constructor(container, changeData, changeMode) {
     this._container = container;
@@ -43,7 +46,13 @@ export default class FilmCard {
     const prevFilmPopupComponent = this._filmPopupComponent;
 
     this._filmComponent = new Film(film);
-    this._filmPopupComponent = new Popup(film);
+
+    if (window.navigator.onLine) {
+      api.getComments(this._film)
+        .then((result) => {
+          this._filmPopupComponent = new Popup(result);
+        });
+    }
 
     this._filmComponent.setClickHandler(this._handlePopupOpenClick);
     this._filmComponent.setWatchlistClickHandler(this._handleWatchlistClick);
@@ -77,17 +86,21 @@ export default class FilmCard {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._removefilmPopupComponent();
-      this._filmPopupComponent.reset(this._film);
+      // this._filmPopupComponent.reset(this._film);
+      this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film));
     }
   }
 
   _handlePopupOpenClick() {
     render(body, this._filmPopupComponent);
-    document.addEventListener(`keydown`, this._escKeyDownHandler);
 
+    // if (this._filmPopupComponent) {
+    document.addEventListener(`keydown`, this._escKeyDownHandler);
     this._filmPopupComponent.setClosePopupHandler(this._handlePopupCloseClick);
     this._changeMode();
     this._mode = Mode.EDITING;
+    // }
+
   }
 
   _handlePopupCloseClick(film) {

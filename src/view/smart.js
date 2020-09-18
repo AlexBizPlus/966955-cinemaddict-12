@@ -1,5 +1,10 @@
 import Abstract from './abstract';
+import {
+  BackendValues
+} from "../const";
+import Api from "../api.js";
 
+const api = new Api(BackendValues.END_POINT, BackendValues.AUTHORIZATION);
 export default class Smart extends Abstract {
 
   updateData(update) {
@@ -14,28 +19,51 @@ export default class Smart extends Abstract {
     if (!update) {
       return;
     }
-    this._data.comments.push(update);
-    this.updateElement();
+    api.updateComments(this._data.id, update)
+      .then((comments) => {
+        delete this._data.comments;
+        this._data.comments = comments;
+      })
+      .then(() => this.updateElement())
+      .catch(() => {
+        this.shake(this.updateElement.bind(this));
+      });
   }
 
-  deleteComment(index) {
-    this._data.comments = [
-      ...this._data.comments.slice(0, index),
-      ...this._data.comments.slice(index + 1)
-    ];
-    this.updateElement();
+  // updateComments(update) {
+  //   if (!update) {
+  //     return;
+  //   }
+  //   this._data.comments.push(update);
+  //   this.updateElement();
+  // }
+
+  deleteComment(number) {
+    const id = number.split(`-`)[0];
+    const index = number.split(`-`)[1];
+    api.deleteComment(id)
+      .then(() => this._data.comments.splice(index, 1))
+      .then(() => this.updateElement())
+      .catch(() => {
+        this.shake(this.updateElement.bind(this));
+      });
   }
+
+  // deleteComment(index) {
+  //   this._data.comments = [
+  //     ...this._data.comments.slice(0, index),
+  //     ...this._data.comments.slice(index + 1)
+  //   ];
+  //   this.updateElement();
+  // }
 
   updateElement() {
     let prevElement = this.getElement();
     const parent = prevElement.parentElement;
     this.removeElement();
-
     const newElement = this.getElement();
-
     parent.replaceChild(newElement, prevElement);
     prevElement = null;
-
     this.restoreHandlers();
   }
 }

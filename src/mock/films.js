@@ -1,4 +1,5 @@
-import {
+
+/*import {
   getRandomInteger
 } from '../utils/common';
 import {
@@ -125,3 +126,4 @@ export const generateMockFilm = () => {
     isFavorites: Boolean(getRandomInteger(0, 1)),
   };
 };
+*/

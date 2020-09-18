@@ -26,6 +26,17 @@ export default class Api {
       .then((films) => films.map(FilmsModel.adaptToClient));
   }
 
+
+  getComments(film) {
+    return this._load({
+      url: `comments/${film.id}`
+    })
+      .then(Api.toJSON)
+      .then((comments) => {
+        return FilmsModel.adaptCommentsToClient(film, comments);
+      });
+  }
+
   updateFilm(film) {
     return this._load({
       url: `movies/${film.id}`,
@@ -37,6 +48,19 @@ export default class Api {
     })
       .then(Api.toJSON)
       .then(FilmsModel.adaptToClient);
+  }
+
+  updateComments(id, comment) {
+    return this._load({
+      url: `comments/${id}`,
+      method: Method.POST,
+      body: JSON.stringify(FilmsModel.adaptCommentToServer(comment)),
+      headers: new Headers({
+        "Content-Type": `application/json`
+      })
+    })
+      .then(Api.toJSON)
+      .then(FilmsModel.adaptNewCommentsToClient);
   }
 
   // addFilm(film) {
@@ -52,12 +76,12 @@ export default class Api {
   //     .then(FilmsModel.adaptToClient);
   // }
 
-  // deleteFilm(film) {
-  //   return this._load({
-  //     url: `films/${film.id}`,
-  //     method: Method.DELETE
-  //   });
-  // }
+  deleteComment(id) {
+    return this._load({
+      url: `comments/${id}`,
+      method: Method.DELETE
+    });
+  }
 
   _load({
     url,
