@@ -1,33 +1,49 @@
-import Profile from './view/profile';
+import FilterPresenter from "./presenter/filter.js";
 import Menu from './view/menu';
-import Stat from './view/stat';
-import FilmSection from './presenter/film-section';
-import {
-  generateMockFilm
-} from './mock/films';
+import FilmSectionPresenter from './presenter/film-section';
 import {
   render,
 } from './utils/render';
 import {
-  FilmSettings
+  UpdateType,
+  BackendValues
 } from './const';
+import FilmsModel from './model/films';
+import FilterModel from "./model/filter.js";
+import Api from "./api.js";
 
-const mockFilmList = new Array(FilmSettings.FILMS_COUNT).fill().map(generateMockFilm);
-const mockFilmExtraList = new Array(FilmSettings.EXTRA_COUNT).fill().map(generateMockFilm);
-const mockFilmMostList = new Array(FilmSettings.MOST_COUNT).fill().map(generateMockFilm);
-
-const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
-const footerStatContainer = document.querySelector(`.footer__statistics`);
 
-const profile = new Profile();
-render(header, profile);
+const api = new Api(BackendValues.END_POINT, BackendValues.AUTHORIZATION);
 
-const menu = new Menu(mockFilmList);
+const filmsModel = new FilmsModel();
+
+const menu = new Menu();
 render(main, menu);
 
-const filmSection = new FilmSection(main);
-filmSection.init(mockFilmList, mockFilmExtraList, mockFilmMostList);
+const filterModel = new FilterModel();
+const filterPresenter = new FilterPresenter(menu, filterModel, filmsModel);
+const filmSectionPresenter = new FilmSectionPresenter(main, filmsModel, filterModel, api);
 
-const footerStat = new Stat(FilmSettings.FILMS_COUNT);
-render(footerStatContainer, footerStat);
+filterPresenter.init();
+filmSectionPresenter.init();
+
+api.getFilms()
+  .then((films) => {
+    console.log(films);
+    filmsModel.setFilms(UpdateType.INIT, films);
+    menu.getElement().style.display = ``;
+  })
+  .catch(() => {
+    filmsModel.setFilms(UpdateType.INIT, []);
+    menu.getElement().style.display = ``;
+  });
+
+// const filterModel = new FilterModel();
+// const filterPresenter = new FilterPresenter(menu, filterModel, filmsModel);
+// const filmSectionPresenter = new FilmSectionPresenter(main, filmsModel, filterModel, api);
+
+// filterPresenter.init();
+// filmSectionPresenter.init();
+
+

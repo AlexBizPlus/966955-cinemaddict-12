@@ -6,16 +6,15 @@ import {
   replace
 } from '../utils/render';
 import {
-  isEscPressed
-} from "../utils/common";
+  UserAction,
+  UpdateType,
+  BackendValues,
+  Mode
+} from "../const.js";
+import Api from "../api.js";
 
-const Mode = {
-  DEFAULT: `DEFAULT`,
-  EDITING: `EDITING`
-};
-
+const api = new Api(BackendValues.END_POINT, BackendValues.AUTHORIZATION);
 const body = document.querySelector(`body`);
-
 export default class FilmCard {
   constructor(container, changeData, changeMode) {
     this._container = container;
@@ -42,7 +41,14 @@ export default class FilmCard {
     const prevFilmPopupComponent = this._filmPopupComponent;
 
     this._filmComponent = new Film(film);
-    this._filmPopupComponent = new Popup(film);
+
+    api.getComments(this._film)
+      .then((result) => {
+        this._filmPopupComponent = new Popup(result);
+      })
+      .catch(() => {
+        this._filmPopupComponent = new Popup(film);
+      });
 
     this._filmComponent.setClickHandler(this._handlePopupOpenClick);
     this._filmComponent.setWatchlistClickHandler(this._handleWatchlistClick);
@@ -73,17 +79,17 @@ export default class FilmCard {
   }
 
   _escKeyDownHandler(evt) {
-    if (isEscPressed) {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._removefilmPopupComponent();
-      this._filmPopupComponent.reset(this._film);
+      this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film));
     }
   }
 
   _handlePopupOpenClick() {
     render(body, this._filmPopupComponent);
-    document.addEventListener(`keydown`, this._escKeyDownHandler);
 
+    document.addEventListener(`keydown`, this._escKeyDownHandler);
     this._filmPopupComponent.setClosePopupHandler(this._handlePopupCloseClick);
     this._changeMode();
     this._mode = Mode.EDITING;
@@ -91,23 +97,23 @@ export default class FilmCard {
 
   _handlePopupCloseClick(film) {
     this._removefilmPopupComponent();
-    this._changeData(Object.assign({}, film));
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, film));
   }
 
   _handleWatchlistClick() {
-    this._changeData(Object.assign({}, this._film, {
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {
       isWatchlist: !this._film.isWatchlist
     }));
   }
 
   _handleHistoryClick() {
-    this._changeData(Object.assign({}, this._film, {
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {
       isHistory: !this._film.isHistory
     }));
   }
 
   _handleFavoritesClick() {
-    this._changeData(Object.assign({}, this._film, {
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {
       isFavorites: !this._film.isFavorites
     }));
   }

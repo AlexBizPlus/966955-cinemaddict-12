@@ -1,10 +1,13 @@
-import {
-  humanizeTaskDueDate
-} from '../utils/films';
+import he from "he";
+// import {
+//   humanizeTaskDueDate
+// } from '../utils/films';
 import {
   EMOJIS
 } from "../const";
 import SmartView from "./smart.js";
+import moment from 'moment';
+// import { now } from 'moment';
 // import flatpickr from "flatpickr";
 
 // import "../../node_modules/flatpickr/dist/flatpickr.min.css";
@@ -18,6 +21,8 @@ export default class Popup extends SmartView {
     this._addHistoryHandler = this._addHistoryHandler.bind(this);
     this._addFavoritesHandler = this._addFavoritesHandler.bind(this);
     this._addEmojiHandler = this._addEmojiHandler.bind(this);
+    this._addCommentHandler = this._addCommentHandler.bind(this);
+    this._removeCommentHandler = this._removeCommentHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -43,6 +48,14 @@ export default class Popup extends SmartView {
     this.getElement()
       .querySelector(`.film-details__emoji-list`)
       .addEventListener(`change`, this._addEmojiHandler);
+
+    this.getElement()
+      .querySelector(`.film-details__comment-input`)
+      .addEventListener(`keydown`, this._addCommentHandler);
+
+    this.getElement()
+      .querySelector(`.film-details__comments-list`)
+      .addEventListener(`click`, this._removeCommentHandler);
   }
 
   _addWatchlistHandler(evt) {
@@ -75,6 +88,28 @@ export default class Popup extends SmartView {
     });
   }
 
+  _addCommentHandler(evt) {
+    if ((evt.ctrlKey || evt.metaKey) && (evt.keyCode === 13 || evt.keyCode === 10)) {
+      evt.preventDefault();
+      const newComment = Object.assign({}, this._data.currentComment, {
+        comment: evt.target.value,
+        day: moment().format(`YYYY/MM/DD HH:mm`)
+      });
+      this._textAreaValue = evt.target.value;
+      this.updateComments(newComment);
+    }
+  }
+
+  _removeCommentHandler(evt) {
+    if (evt.target.tagName !== `BUTTON`) {
+      return;
+    }
+    evt.preventDefault();
+    this.deleteComment(evt.target.dataset.commentNumber);
+    evt.target.setAttribute(`disabled`, `disabled`);
+    evt.target.innerText = `Deleting...`;
+  }
+
   _closePopupHandler(evt) {
     evt.preventDefault();
     this._callback.closePopup(Popup.parseDataToFilm(this._data));
@@ -87,7 +122,7 @@ export default class Popup extends SmartView {
 
   getTemplate() {
     const {
-      poster, title, description, totalRating, releaseDate, runtime, genre,
+      poster, title, alternativeTitle, description, totalRating, releaseDate, runtime, genre,
       comments, currentComment, age, director, writers, actors, country,
       isWatchlist, isHistory, isFavorites
     } = this._data;
@@ -123,17 +158,21 @@ export default class Popup extends SmartView {
     const renderComments = () => {
       let result = [];
       for (let i = 0; i < comments.length; i++) {
+        const emojiTest = (comments[i].emoji === null)
+          ? ``
+          : `src="./images/emoji/${comments[i].emoji}.png" alt="emoji-${comments[i].emoji}" `;
+
         result.push(`
       <li class="film-details__comment">
         <span class="film-details__comment-emoji">
-          <img src="./images/emoji/${comments[i].emoji}.png" width="55" height="55" alt="emoji-${comments[i].emoji}">
+          <img ${emojiTest}" width="55" height="55">
         </span>
         <div>
           <p class="film-details__comment-text">${comments[i].comment}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comments[i].author}</span>
             <span class="film-details__comment-day">${comments[i].day}</span>
-            <button class="film-details__comment-delete">Delete</button>
+            <button type="button" class="film-details__comment-delete" data-comment-number="${comments[i].id}-${i}">Delete</button>
           </p>
         </div>
       </li>`);
@@ -162,7 +201,7 @@ export default class Popup extends SmartView {
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">Original: ${title}</p>
+              <p class="film-details__title-original">Original: ${alternativeTitle}</p>
             </div>
 
             <div class="film-details__rating">
@@ -185,7 +224,7 @@ export default class Popup extends SmartView {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${humanizeTaskDueDate(releaseDate)}</td>
+              <td class="film-details__cell">${releaseDate}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -249,9 +288,9 @@ export default class Popup extends SmartView {
     </section>`;
   }
 
-  reset(film) {
-    this.updateData(Popup.parseFilmToData(film));
-  }
+  // reset(film) {
+  //   this.updateData(Popup.parseFilmToData(film));
+  // }
 
   static parseFilmToData(film) {
     return Object.assign({}, film);

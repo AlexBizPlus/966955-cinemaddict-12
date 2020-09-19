@@ -1,6 +1,10 @@
-import {
+
+/*import {
   getRandomInteger
 } from '../utils/common';
+import {
+  nanoid
+} from 'nanoid';
 
 const postersPathes = [
   `made-for-each-other.png`,
@@ -83,7 +87,7 @@ const getRandomGenres = () => {
   return randomGenres;
 };
 
-const getRandomComment = () => {
+export const getRandomComment = () => {
   return {
     comment: getRandomElement(descriptions),
     emoji: getRandomElement(emojis),
@@ -92,17 +96,14 @@ const getRandomComment = () => {
   };
 };
 
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
-
 export const generateMockFilm = () => {
   const poster = `./images/posters/${getRandomElement(postersPathes)}`;
   const title = getTitleOfFilm(poster);
 
   return {
-    id: generateId(),
+    id: nanoid(10),
     poster,
     title,
-    // originalTitle,
     description: getRandomElement(descriptions),
     totalRating: getRandomRating(),
     releaseDate: getRandomDate(),
@@ -125,3 +126,4 @@ export const generateMockFilm = () => {
     isFavorites: Boolean(getRandomInteger(0, 1)),
   };
 };
+*/
