@@ -1,11 +1,12 @@
 import he from "he";
-import {
-  humanizeTaskDueDate
-} from '../utils/films';
+// import {
+//   humanizeTaskDueDate
+// } from '../utils/films';
 import {
   EMOJIS
 } from "../const";
 import SmartView from "./smart.js";
+import moment from 'moment';
 // import { now } from 'moment';
 // import flatpickr from "flatpickr";
 
@@ -92,10 +93,9 @@ export default class Popup extends SmartView {
       evt.preventDefault();
       const newComment = Object.assign({}, this._data.currentComment, {
         comment: evt.target.value,
-        day: `2020-09-18T16:12:32.554Z`
+        day: moment().format(`YYYY/MM/DD HH:mm`)
       });
-      console.log(evt.target);
-
+      this._textAreaValue = evt.target.value;
       this.updateComments(newComment);
     }
   }
@@ -224,7 +224,7 @@ export default class Popup extends SmartView {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${humanizeTaskDueDate(releaseDate)}</td>
+              <td class="film-details__cell">${releaseDate}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>

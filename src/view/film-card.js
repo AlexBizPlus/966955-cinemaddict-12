@@ -1,7 +1,7 @@
 import Abstract from './abstract';
-import {
-  humanizeTaskDueDate
-} from '../utils/films';
+// import {
+//   humanizeTaskDueDate
+// } from '../utils/films';
 export default class Film extends Abstract {
   constructor(film) {
     super();
@@ -14,7 +14,21 @@ export default class Film extends Abstract {
 
   _clickHandler(evt) {
     evt.preventDefault();
-    this._callback.click();
+
+    switch (evt.target.tagName) {
+      case `H3`:
+        this._callback.click();
+        break;
+      case `IMG`:
+        this._callback.click();
+        break;
+      case `A`:
+        this._callback.click();
+        break;
+
+      default:
+        return;
+    }
   }
 
   _watchlistClickHandler(evt) {
@@ -34,7 +48,7 @@ export default class Film extends Abstract {
 
   setClickHandler(callback) {
     this._callback.click = callback;
-    this.getElement().querySelector(`img`).addEventListener(`click`, this._clickHandler);
+    this.getElement().addEventListener(`click`, this._clickHandler);
   }
 
   setWatchlistClickHandler(callback) {
@@ -61,11 +75,15 @@ export default class Film extends Abstract {
       return property ? `film-card__controls-item--active` : ``;
     };
 
+    // const checkDescription = (property) => {
+    //   return property ? `film-card__controls-item--active` : ``;
+    // };
+
     return `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${totalRating}</p>
       <p class="film-card__info">
-        <span class="film-card__year">${humanizeTaskDueDate(releaseDate)}</span>
+        <span class="film-card__year">${releaseDate}</span>
         <span class="film-card__duration">${runtime}</span>
         <span class="film-card__genre">${genre.join(` `)}</span>
       </p>

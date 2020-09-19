@@ -3,7 +3,7 @@ export const SHAKE_ANIMATION_TIMEOUT = 600;
 export const EMOJIS = [`smile`, `sleeping`, `puke`, `angry`];
 
 export const SortType = {
-  DEFAULT: `default`,
+  BY_DEFAULT: `by-default`,
   BY_DATE: `by-date`,
   BY_RATING: `by-rating`
 };
@@ -46,8 +46,13 @@ export const ProfileRating = {
   MOVIE_BUFF: `movie buff`
 };
 
+export const Mode = {
+  DEFAULT: `DEFAULT`,
+  EDITING: `EDITING`
+};
+
 export const BackendValues = {
-  AUTHORIZATION: `Basic kay9g03aazae171q`,
+  AUTHORIZATION: `Basic 12y9443aazaer71q`,
   END_POINT: `https://12.ecmascript.pages.academy/cinemaddict`
 };
 

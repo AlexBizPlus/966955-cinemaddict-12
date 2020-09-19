@@ -20,7 +20,8 @@ import {
 import {
   sortFilmByDate,
   sortFilmByRating,
-  sortFilmByComments
+  sortFilmByComments,
+  sortFilmById
 } from '../utils/films';
 import {
   header,
@@ -39,7 +40,7 @@ export default class FilmSection {
     this._filmSectionContainer = container;
     this._api = api;
 
-    this._currentSortType = SortType.DEFAULT;
+    this._currentSortType = SortType.BY_DEFAULT;
     this._renderedFilmCount = FilmSettings.PER_STEP;
     this._renderedFilmExtraCount = FilmSettings.EXTRA_COUNT;
     this._renderedFilmMostCount = FilmSettings.MOST_COUNT;
@@ -78,11 +79,11 @@ export default class FilmSection {
     render(this._filmsComponent, this._filmsListComponent);
     render(this._filmsListComponent, this._filmsListMainContainerComponent);
 
-    render(this._filmsComponent, this._filmsListExtra);
-    render(this._filmsListExtra, this._filmsListExtraContainer);
+    // render(this._filmsComponent, this._filmsListExtra);
+    // render(this._filmsListExtra, this._filmsListExtraContainer);
 
-    render(this._filmsComponent, this._filmsListMost);
-    render(this._filmsListMost, this._filmsListMostContainer);
+    // render(this._filmsComponent, this._filmsListMost);
+    // render(this._filmsListMost, this._filmsListMostContainer);
 
     this._renderFilmSection();
   }
@@ -98,7 +99,11 @@ export default class FilmSection {
       case SortType.BY_RATING:
         return filtredFilms.sort(sortFilmByRating);
     }
-    return filtredFilms;
+    // case SortType.BY_DEFAULT:
+    // return filtredFilms;
+    return filtredFilms.sort(sortFilmById);
+
+    // return filtredFilms;
   }
 
   _clearFilmSection({
@@ -128,7 +133,7 @@ export default class FilmSection {
     }
 
     if (resetSortType) {
-      this._currentSortType = SortType.DEFAULT;
+      this._currentSortType = SortType.BY_DEFAULT;
     }
   }
 
@@ -139,18 +144,10 @@ export default class FilmSection {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    switch (actionType) {
-      case UserAction.UPDATE_FILM:
-        this._api.updateFilm(update).then((response) => {
-          this._filmsModel.updateFilm(updateType, response);
-        });
-        break;
-      // case UserAction.ADD_COMMENT:
-      //   this._filmsModel.addFilm(updateType, update);
-      //   break;
-      // case UserAction.DELETE_COMMENT:
-      //   this._filmsModel.deleteFilm(updateType, update);
-      //   break;
+    if (actionType === UserAction.UPDATE_FILM) {
+      this._api.updateFilm(update).then((response) => {
+        this._filmsModel.updateFilm(updateType, response);
+      });
     }
   }
 
@@ -255,8 +252,6 @@ export default class FilmSection {
     const films = this._getFilms();
     const filmCount = films.length;
 
-    console.log(filmCount);
-
     if (filmCount === 0) {
       this._renderNoFilm();
       return;
@@ -274,11 +269,17 @@ export default class FilmSection {
   }
 
   _renderFilmsExtra() {
+    render(this._filmsComponent, this._filmsListExtra);
+    render(this._filmsListExtra, this._filmsListExtraContainer);
+
     const films = this._filmsModel.getFilms().slice().sort(sortFilmByRating).slice(0, FilmSettings.EXTRA_COUNT);
     this._renderFilms(films, this._filmsListExtraContainer);
   }
 
   _renderFilmsMost() {
+    render(this._filmsComponent, this._filmsListMost);
+    render(this._filmsListMost, this._filmsListMostContainer);
+
     const films = this._filmsModel.getFilms().slice().sort(sortFilmByComments).slice(0, FilmSettings.MOST_COUNT);
     this._renderFilms(films, this._filmsListMostContainer);
   }
@@ -300,7 +301,6 @@ export default class FilmSection {
     if (this._currentSortType === sortType) {
       return;
     }
-
     this._currentSortType = sortType;
     this._clearFilmSection({
       resetRenderedFilmCount: true

@@ -12,7 +12,7 @@ export default class Sort extends Abstract {
 
   _createSortTemplate(currentSortType) {
     return `<ul class="sort">
-      <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button ${currentSortType === SortType.DEFAULT ? `sort__button--active` : ``} ">Sort by default</a></li>
+      <li><a href="#" data-sort-type="${SortType.BY_DEFAULT}" class="sort__button ${currentSortType === SortType.BY_DEFAULT ? `sort__button--active` : ``} ">Sort by default</a></li>
       <li><a href="#" data-sort-type="${SortType.BY_DATE}" class="sort__button ${currentSortType === SortType.BY_DATE ? `sort__button--active` : ``}">Sort by date</a></li>
       <li><a href="#" data-sort-type="${SortType.BY_RATING}" class="sort__button ${currentSortType === SortType.BY_RATING ? `sort__button--active` : ``}">Sort by rating</a></li>
     </ul>`;

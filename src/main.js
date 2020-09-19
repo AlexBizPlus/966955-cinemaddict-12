@@ -38,3 +38,12 @@ api.getFilms()
     filmsModel.setFilms(UpdateType.INIT, []);
     menu.getElement().style.display = ``;
   });
+
+// const filterModel = new FilterModel();
+// const filterPresenter = new FilterPresenter(menu, filterModel, filmsModel);
+// const filmSectionPresenter = new FilmSectionPresenter(main, filmsModel, filterModel, api);
+
+// filterPresenter.init();
+// filmSectionPresenter.init();
+
+

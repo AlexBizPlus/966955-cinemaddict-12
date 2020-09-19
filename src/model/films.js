@@ -2,7 +2,7 @@ import Observer from "../utils/observer";
 import {
   EMOJIS
 } from "../const";
-
+import moment from 'moment';
 export default class Films extends Observer {
   constructor() {
     super();
@@ -66,8 +66,10 @@ export default class Films extends Observer {
       alternativeTitle: film.film_info.alternative_title,
       description: film.film_info.description,
       totalRating: film.film_info.total_rating,
-      releaseDate: film.film_info.release.date,
-      runtime: film.film_info.runtime,
+      // releaseDate: film.film_info.release.date,
+      releaseDate: moment(new Date(film.film_info.release.date)).format(`DD MMMM YYYY`),
+      runtime: moment.utc(moment.duration(film.film_info.runtime, `minutes`).asMilliseconds()).format(`HH[h] mm[m]`),
+      // runtime: film.film_info.runtime,
       genre: film.film_info.genre,
       age: film.film_info.age_rating,
       director: film.film_info.director,
@@ -77,12 +79,16 @@ export default class Films extends Observer {
       isWatchlist: film.user_details.watchlist,
       isHistory: film.user_details.already_watched,
       isFavorites: film.user_details.favorite,
-      watchingDate: film.user_details.watching_date,
+      watchingDate: moment(new Date(film.user_details.watching_date)).format(`YYYY/MM/DD`),
+      // watchingDate: film.user_details.watching_date,
       currentComment: {
         comment: null,
         emoji: EMOJIS[0],
         day: null
       },
+      watchingDateUnformated: film.user_details.watching_date,
+      releaseDateUnformated: film.film_info.release.date,
+      runtimeUnformated: film.film_info.runtime,
     });
 
     delete adaptedFilm.film_info;
@@ -95,7 +101,7 @@ export default class Films extends Observer {
     const adaptedComments = commentsArray.map((element) => {
       const newElement = Object.assign({}, element, {
         emoji: element.emotion,
-        day: element.date
+        day: moment(new Date(element.date)).format(`YYYY/MM/DD HH:mm`)
       });
 
       delete newElement.emotion;
@@ -113,7 +119,6 @@ export default class Films extends Observer {
   }
 
   static adaptCommentsToClient(film, commentsArray) {
-
     const adaptedFilm = Object.assign({}, film, {
       comments: Films.modyfyComments(commentsArray)
     });
@@ -129,7 +134,7 @@ export default class Films extends Observer {
         "alternative_title": film.alternativeTitle,
         "description": film.description,
         "total_rating": film.totalRating,
-        "runtime": film.runtime,
+        "runtime": film.runtimeUnformated,
         "genre": film.genre,
         "age_rating": film.age,
         "director": film.director,
@@ -137,14 +142,14 @@ export default class Films extends Observer {
         "actors": film.actors,
         "release": Object.assign({}, {
           "release_country": film.country,
-          "date": film.releaseDate,
+          "date": film.releaseDateUnformated,
         }),
       }),
       "user_details": Object.assign({}, {
         "watchlist": film.isWatchlist,
         "already_watched": film.isHistory,
         "favorite": film.isFavorites,
-        "watching_date": film.watchingDate,
+        "watching_date": film.watchingDateUnformated,
       }),
       "comments": film.comments.map((comment) => {
         if (comment.id) {
