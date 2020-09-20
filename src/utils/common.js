@@ -1,20 +1,15 @@
-export const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
+import {
+  EnterKeycode
+} from "../const";
 
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
+export const isEscPressed = (evt) => {
+  return (evt.key === `Escape` || evt.key === `Esc`)
+    ? true
+    : false;
 };
 
-// export const updateItem = (items, update) => {
-//   const index = items.findIndex((item) => item.id === update.id);
-
-//   if (index === -1) {
-//     return items;
-//   }
-
-//   return [
-//     ...items.slice(0, index),
-//     update,
-//     ...items.slice(index + 1)
-//   ];
-// };
+export const isCtrlEnterPressed = (evt) => {
+  return ((evt.ctrlKey || evt.metaKey) && (evt.keyCode === EnterKeycode.first || evt.keyCode === EnterKeycode.second))
+    ? true
+    : false;
+};

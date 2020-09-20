@@ -1,6 +1,9 @@
 import FilterPresenter from "./presenter/filter.js";
 import Menu from './view/menu';
 import FilmSectionPresenter from './presenter/film-section';
+import FilmsModel from './model/films';
+import FilterModel from "./model/filter.js";
+import Api from "./api.js";
 import {
   render,
 } from './utils/render';
@@ -8,9 +11,6 @@ import {
   UpdateType,
   BackendValues
 } from './const';
-import FilmsModel from './model/films';
-import FilterModel from "./model/filter.js";
-import Api from "./api.js";
 
 const main = document.querySelector(`.main`);
 

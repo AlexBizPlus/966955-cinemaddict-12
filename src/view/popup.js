@@ -1,15 +1,19 @@
 import he from "he";
 import moment from 'moment';
+import SmartView from "./smart.js";
 import {
   EMOJIS
 } from "../const";
-import SmartView from "./smart.js";
+import {
+  isCtrlEnterPressed
+} from "../utils/common";
+
 export default class Popup extends SmartView {
   constructor(film) {
     super();
     this._data = Popup.parseFilmToData(film);
-    this._closePopupHandler = this._closePopupHandler.bind(this);
 
+    this._closePopupHandler = this._closePopupHandler.bind(this);
     this._addWatchlistHandler = this._addWatchlistHandler.bind(this);
     this._addHistoryHandler = this._addHistoryHandler.bind(this);
     this._addFavoritesHandler = this._addFavoritesHandler.bind(this);
@@ -82,7 +86,7 @@ export default class Popup extends SmartView {
   }
 
   _addCommentHandler(evt) {
-    if ((evt.ctrlKey || evt.metaKey) && (evt.keyCode === 13 || evt.keyCode === 10)) {
+    if (isCtrlEnterPressed(evt)) {
       evt.preventDefault();
       const newComment = Object.assign({}, this._data.currentComment, {
         comment: evt.target.value,

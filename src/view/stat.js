@@ -2,16 +2,10 @@ import Abstract from './abstract';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import moment from 'moment';
+import Profile from '../view/profile';
 import {
   CHAR_BAR_HEIGHT
 } from "../const";
-// import {
-//   filter
-// } from '../utils/filter.js';
-// import {
-//   FilterType,
-// } from '../const';
-import Profile from '../view/profile';
 
 export default class Stat extends Abstract {
   constructor(films) {
@@ -145,7 +139,9 @@ export default class Stat extends Abstract {
   }
 
   _createCanvas() {
-    Array.from(document.querySelector(`.statistic__chart-wrap`).children).map((item) => item.remove());
+    Array.from(document.
+      querySelector(`.statistic__chart-wrap`).children)
+      .map((item) => item.remove());
     const newCanvas = document.createElement(`canvas`);
     newCanvas.classList.add(`statistic__chart`);
     newCanvas.setAttribute(`width`, `1000`);
@@ -167,68 +163,54 @@ export default class Stat extends Abstract {
     this._createCanvas();
 
     switch (evt.target.id) {
-      case `statistic-all-time`:
-        this._getGenresMap();
-
-        this._setTextToHtml(`totalWachedFilms`, `${this._getTotalWachedFilms(this._films)} <span class="statistic__item-description">movies</span>`);
-        this._setTextToHtml(`totalRuntime`, this._getTotalRuntime(this._genres.totalRuntime));
-        this._setTextToHtml(`topGenre`, this._getTopGenre());
-
-        this.myChart();
-        this._currentFilter = `statistic-all-time`;
-        break;
 
       case `statistic-today`:
-        this._films.today = this._getFilms(this._films, 24, `h`);
+        if (!this._films.today) {
+          this._films.today = this._getFilms(this._films, 24, `h`);
+        }
         this._getGenresMap(this._films.today);
-
         this._setTextToHtml(`totalWachedFilms`, `${this._getTotalWachedFilms(this._films.today)} <span class="statistic__item-description">movies</span>`);
-        this._setTextToHtml(`totalRuntime`, this._getTotalRuntime(this._genres.totalRuntime));
-        this._setTextToHtml(`topGenre`, this._getTopGenre());
-
-        this.myChart();
         this._currentFilter = `statistic-today`;
         break;
 
       case `statistic-week`:
-        this._films.week = this._getFilms(this._films, 7, `d`);
+        if (!this._films.week) {
+          this._films.week = this._getFilms(this._films, 7, `d`);
+        }
         this._getGenresMap(this._films.week);
-
         this._setTextToHtml(`totalWachedFilms`, `${this._getTotalWachedFilms(this._films.week)} <span class="statistic__item-description">movies</span>`);
-        this._setTextToHtml(`totalRuntime`, this._getTotalRuntime(this._genres.totalRuntime));
-        this._setTextToHtml(`topGenre`, this._getTopGenre());
-
-        this.myChart();
         this._currentFilter = `statistic-week`;
         break;
 
       case `statistic-month`:
-        this._films.month = this._getFilms(this._films, 1, `M`);
+        if (!this._films.month) {
+          this._films.month = this._getFilms(this._films, 1, `M`);
+        }
         this._getGenresMap(this._films.month);
-
         this._setTextToHtml(`totalWachedFilms`, `${this._getTotalWachedFilms(this._films.month)} <span class="statistic__item-description">movies</span>`);
-        this._setTextToHtml(`totalRuntime`, this._getTotalRuntime(this._genres.totalRuntime));
-        this._setTextToHtml(`topGenre`, this._getTopGenre());
-
-        this.myChart();
         this._currentFilter = `statistic-month`;
         break;
 
       case `statistic-year`:
-        this._films.year = this._getFilms(this._films, 1, `y`);
+        if (!this._films.year) {
+          this._films.year = this._getFilms(this._films, 1, `y`);
+        }
         this._getGenresMap(this._films.year);
-
         this._setTextToHtml(`totalWachedFilms`, `${this._getTotalWachedFilms(this._films.year)} <span class="statistic__item-description">movies</span>`);
-        this._setTextToHtml(`totalRuntime`, this._getTotalRuntime(this._genres.totalRuntime));
-        this._setTextToHtml(`topGenre`, this._getTopGenre());
-
-        this.myChart();
         this._currentFilter = `statistic-year`;
         break;
 
       default:
-        return;
+        this._getGenresMap();
+        this._setTextToHtml(`totalWachedFilms`, `${this._getTotalWachedFilms(this._films)} <span class="statistic__item-description">movies</span>`);
+        this._currentFilter = `statistic-all-time`;
+        break;
     }
+
+    this._setTextToHtml(`totalRuntime`, this._getTotalRuntime(this._genres.totalRuntime));
+    this._setTextToHtml(`topGenre`, this._getTopGenre());
+
+    this.myChart();
   }
 
   setStatClickHandler(callback) {
@@ -284,9 +266,9 @@ export default class Stat extends Abstract {
     return `<section class= "statistic" >
         <p class="statistic__rank">
           Your rank
-      <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+           <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
             <span class="statistic__rank-label">${this._profile._setProfileRating()}</span>
-    </p>
+        </p>
 
           <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
             <p class="statistic__filters-description">Show stats:</p>

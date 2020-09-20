@@ -1,8 +1,8 @@
 import Abstract from './abstract';
+import Api from "../api.js";
 import {
   BackendValues
 } from "../const";
-import Api from "../api.js";
 
 const api = new Api(BackendValues.END_POINT, BackendValues.AUTHORIZATION);
 export default class Smart extends Abstract {
@@ -29,14 +29,6 @@ export default class Smart extends Abstract {
         this.shake(this.updateElement.bind(this));
       });
   }
-
-  // updateComments(update) {
-  //   if (!update) {
-  //     return;
-  //   }
-  //   this._data.comments.push(update);
-  //   this.updateElement();
-  // }
 
   deleteComment(number) {
     const id = number.split(`-`)[0];

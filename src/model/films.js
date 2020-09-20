@@ -1,8 +1,9 @@
+import moment from 'moment';
 import Observer from "../utils/observer";
 import {
   EMOJIS
 } from "../const";
-import moment from 'moment';
+
 export default class Films extends Observer {
   constructor() {
     super();
@@ -11,7 +12,6 @@ export default class Films extends Observer {
 
   setFilms(updateType, films) {
     this._films = films.slice();
-
     this._notify(updateType);
   }
 
@@ -35,30 +35,6 @@ export default class Films extends Observer {
     this._notify(updateType, update);
   }
 
-  addFilm(updateType, update) {
-    this._films = [
-      update,
-      ...this._films
-    ];
-
-    this._notify(updateType, update);
-  }
-
-  deleteFilm(updateType, update) {
-    const index = this._films.findIndex((film) => film.id === update.id);
-
-    if (index === -1) {
-      throw new Error(`Can't delete unexisting film`);
-    }
-
-    this._films = [
-      ...this._films.slice(0, index),
-      ...this._films.slice(index + 1)
-    ];
-
-    this._notify(updateType);
-  }
-
   static adaptToClient(film) {
     const adaptedFilm = Object.assign({}, film, {
       poster: film.film_info.poster,
@@ -66,10 +42,8 @@ export default class Films extends Observer {
       alternativeTitle: film.film_info.alternative_title,
       description: film.film_info.description,
       totalRating: film.film_info.total_rating,
-      // releaseDate: film.film_info.release.date,
       releaseDate: moment(new Date(film.film_info.release.date)).format(`DD MMMM YYYY`),
       runtime: moment.utc(moment.duration(film.film_info.runtime, `minutes`).asMilliseconds()).format(`HH[h] mm[m]`),
-      // runtime: film.film_info.runtime,
       genre: film.film_info.genre,
       age: film.film_info.age_rating,
       director: film.film_info.director,
@@ -80,7 +54,6 @@ export default class Films extends Observer {
       isHistory: film.user_details.already_watched,
       isFavorites: film.user_details.favorite,
       watchingDate: moment(new Date(film.user_details.watching_date)).format(`YYYY/MM/DD`),
-      // watchingDate: film.user_details.watching_date,
       currentComment: {
         comment: null,
         emoji: EMOJIS[0],
@@ -93,7 +66,6 @@ export default class Films extends Observer {
 
     delete adaptedFilm.film_info;
     delete adaptedFilm.user_details;
-    // console.log(adaptedFilm);
     return adaptedFilm;
   }
 
@@ -106,9 +78,9 @@ export default class Films extends Observer {
 
       delete newElement.emotion;
       delete newElement.date;
-
       return newElement;
     });
+
     return adaptedComments;
   }
 
@@ -177,8 +149,6 @@ export default class Films extends Observer {
     delete adaptedFilm.watchingDate;
     delete adaptedFilm.genre;
     delete adaptedFilm.currentComment;
-
-    // console.log(adaptedFilm);
     return adaptedFilm;
   }
 
@@ -191,8 +161,6 @@ export default class Films extends Observer {
 
     delete adaptedComment.emoji;
     delete adaptedComment.day;
-
-    // console.log(`adaptedComment`, adaptedComment);
     return adaptedComment;
   }
 }

@@ -70,7 +70,6 @@ export default class FilmSection {
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleStatClick = this._handleStatClick.bind(this);
-    // this._handleStatChange = this._handleStatChange.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -95,8 +94,9 @@ export default class FilmSection {
         return filtredFilms.sort(sortFilmByDate);
       case SortType.BY_RATING:
         return filtredFilms.sort(sortFilmByRating);
+      default:
+        return filtredFilms.sort(sortFilmById);
     }
-    return filtredFilms.sort(sortFilmById);
   }
 
   _clearFilmSection({
@@ -164,6 +164,8 @@ export default class FilmSection {
         this._renderFilmSection();
         this._renderFooterStat();
         break;
+      default:
+        return;
     }
   }
 
@@ -186,6 +188,7 @@ export default class FilmSection {
     this._clearFilmSection({
       resetRenderedFilmCount: true, resetSortType: true
     });
+
     this._renderStat();
   }
 

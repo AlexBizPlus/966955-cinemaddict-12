@@ -3,6 +3,11 @@ export const MAX_DESCRIPTION_LENGTH = 140;
 export const CHAR_BAR_HEIGHT = 50;
 export const EMOJIS = [`smile`, `sleeping`, `puke`, `angry`];
 
+export const EnterKeycode = {
+  first: 13,
+  second: 10
+};
+
 export const SortType = {
   BY_DEFAULT: `by-default`,
   BY_DATE: `by-date`,
@@ -54,7 +59,7 @@ export const Mode = {
 };
 
 export const BackendValues = {
-  AUTHORIZATION: `Basic 1294t355zer71q`,
+  AUTHORIZATION: `Basic 1294t55zer71q`,
   END_POINT: `https://12.ecmascript.pages.academy/cinemaddict`
 };
 
