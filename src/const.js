@@ -1,6 +1,12 @@
 export const SHAKE_ANIMATION_TIMEOUT = 600;
-
+export const MAX_DESCRIPTION_LENGTH = 140;
+export const CHAR_BAR_HEIGHT = 50;
 export const EMOJIS = [`smile`, `sleeping`, `puke`, `angry`];
+
+export const EnterKeycode = {
+  first: 13,
+  second: 10
+};
 
 export const SortType = {
   BY_DEFAULT: `by-default`,
@@ -38,6 +44,7 @@ export const FilterType = {
   WATCHLIST: `Watchlist`,
   HISTORY: `History`,
   FAVORITES: `Favorites`,
+  STAT: `Stat`,
 };
 
 export const ProfileRating = {
@@ -52,7 +59,7 @@ export const Mode = {
 };
 
 export const BackendValues = {
-  AUTHORIZATION: `Basic 12y9443aazaer71q`,
+  AUTHORIZATION: `Basic 1294t55zer71q`,
   END_POINT: `https://12.ecmascript.pages.academy/cinemaddict`
 };
 

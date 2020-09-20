@@ -1,4 +1,5 @@
 import Abstract from './abstract';
+
 export default class FilmsList extends Abstract {
   constructor() {
     super();

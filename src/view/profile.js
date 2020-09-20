@@ -2,6 +2,7 @@ import Abstract from './abstract';
 import {
   ProfileRating
 } from "../const";
+
 export default class Profile extends Abstract {
   constructor(filmsCount) {
     super();

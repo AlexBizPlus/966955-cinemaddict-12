@@ -1,8 +1,3 @@
-// export const humanizeTaskDueDate = (dueDate) => {
-//   return dueDate.toLocaleString(`en-US`, {
-//     day: `numeric`, month: `long`, year: `numeric`
-//   });
-// };
 import moment from "moment";
 
 const getWeightForNullDate = (dateA, dateB) => {
@@ -17,9 +12,10 @@ const getWeightForNullDate = (dateA, dateB) => {
   if (dateB === null) {
     return -1;
   }
-
   return null;
 };
+
+const formatDate = (date) => moment(date, `DD MMMM YYYY`).format(`YYYYMMDD`);
 
 export const sortFilmByDate = (FilmA, FilmB) => {
   const weight = getWeightForNullDate(FilmA.releaseDate, FilmB.releaseDate);
@@ -27,8 +23,7 @@ export const sortFilmByDate = (FilmA, FilmB) => {
   if (weight !== null) {
     return weight;
   }
-
-  return moment(FilmB.releaseDate, `DD MMMM YYYY`).format(`YYYYMMDD`) - moment(FilmA.releaseDate, `DD MMMM YYYY`).format(`YYYYMMDD`);
+  return formatDate(FilmB.releaseDate) - formatDate(FilmA.releaseDate);
 };
 
 export const sortFilmByRating = (FilmA, FilmB) => {
@@ -37,7 +32,6 @@ export const sortFilmByRating = (FilmA, FilmB) => {
   if (weight !== null) {
     return weight;
   }
-
   return FilmB.totalRating - FilmA.totalRating;
 };
 
@@ -56,6 +50,5 @@ export const sortFilmById = (FilmA, FilmB) => {
   if (weight !== null) {
     return weight;
   }
-
   return FilmA.id - FilmB.id;
 };

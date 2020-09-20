@@ -2,6 +2,7 @@ import Abstract from './abstract';
 import {
   SortType
 } from '../const';
+
 export default class Sort extends Abstract {
   constructor(currentSortType) {
     super();
@@ -33,6 +34,7 @@ export default class Sort extends Abstract {
 
   setSortTypeChangeHandler(callback) {
     this._callback.sortTypeChange = callback;
-    this.getElement().addEventListener(`click`, this._sortTypeChangeHandler);
+    this.getElement()
+      .addEventListener(`click`, this._sortTypeChangeHandler);
   }
 }

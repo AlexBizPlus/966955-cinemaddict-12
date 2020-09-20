@@ -1,5 +1,9 @@
 import Film from '../view/film-card';
 import Popup from '../view/popup';
+import Api from "../api.js";
+import {
+  isEscPressed
+} from "../utils/common";
 import {
   render,
   remove,
@@ -11,7 +15,6 @@ import {
   BackendValues,
   Mode
 } from "../const.js";
-import Api from "../api.js";
 
 const api = new Api(BackendValues.END_POINT, BackendValues.AUTHORIZATION);
 const body = document.querySelector(`body`);
@@ -45,9 +48,6 @@ export default class FilmCard {
     api.getComments(this._film)
       .then((result) => {
         this._filmPopupComponent = new Popup(result);
-      })
-      .catch(() => {
-        this._filmPopupComponent = new Popup(film);
       });
 
     this._filmComponent.setClickHandler(this._handlePopupOpenClick);
@@ -79,7 +79,7 @@ export default class FilmCard {
   }
 
   _escKeyDownHandler(evt) {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
+    if (isEscPressed(evt)) {
       evt.preventDefault();
       this._removefilmPopupComponent();
       this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film));
@@ -87,12 +87,15 @@ export default class FilmCard {
   }
 
   _handlePopupOpenClick() {
-    render(body, this._filmPopupComponent);
+    if (this._filmPopupComponent) {
+      render(body, this._filmPopupComponent);
 
-    document.addEventListener(`keydown`, this._escKeyDownHandler);
-    this._filmPopupComponent.setClosePopupHandler(this._handlePopupCloseClick);
-    this._changeMode();
-    this._mode = Mode.EDITING;
+      document.addEventListener(`keydown`, this._escKeyDownHandler);
+
+      this._filmPopupComponent.setClosePopupHandler(this._handlePopupCloseClick);
+      this._changeMode();
+      this._mode = Mode.EDITING;
+    }
   }
 
   _handlePopupCloseClick(film) {

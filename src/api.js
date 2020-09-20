@@ -26,7 +26,6 @@ export default class Api {
       .then((films) => films.map(FilmsModel.adaptToClient));
   }
 
-
   getComments(film) {
     return this._load({
       url: `comments/${film.id}`
@@ -62,19 +61,6 @@ export default class Api {
       .then(Api.toJSON)
       .then(FilmsModel.adaptNewCommentsToClient);
   }
-
-  // addFilm(film) {
-  //   return this._load({
-  //     url: `films`,
-  //     method: Method.POST,
-  //     body: JSON.stringify(FilmsModel.adaptToServer(film)),
-  //     headers: new Headers({
-  //       "Content-Type": `application/json`
-  //     })
-  //   })
-  //     .then(Api.toJSON)
-  //     .then(FilmsModel.adaptToClient);
-  // }
 
   deleteComment(id) {
     return this._load({

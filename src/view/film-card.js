@@ -1,11 +1,13 @@
 import Abstract from './abstract';
-// import {
-//   humanizeTaskDueDate
-// } from '../utils/films';
+import {
+  MAX_DESCRIPTION_LENGTH
+} from '../const';
+
 export default class Film extends Abstract {
   constructor(film) {
     super();
     this._film = film;
+
     this._clickHandler = this._clickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._historyClickHandler = this._historyClickHandler.bind(this);
@@ -15,19 +17,8 @@ export default class Film extends Abstract {
   _clickHandler(evt) {
     evt.preventDefault();
 
-    switch (evt.target.tagName) {
-      case `H3`:
-        this._callback.click();
-        break;
-      case `IMG`:
-        this._callback.click();
-        break;
-      case `A`:
-        this._callback.click();
-        break;
-
-      default:
-        return;
+    if (evt.target.tagName === `H3` || evt.target.tagName === `IMG` || evt.target.tagName === `A`) {
+      this._callback.click();
     }
   }
 
@@ -53,17 +44,23 @@ export default class Film extends Abstract {
 
   setWatchlistClickHandler(callback) {
     this._callback.watchlistClick = callback;
-    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, this._watchlistClickHandler);
+    this.getElement()
+      .querySelector(`.film-card__controls-item--add-to-watchlist`)
+      .addEventListener(`click`, this._watchlistClickHandler);
   }
 
   setHistoryClickHandler(callback) {
     this._callback.historyClick = callback;
-    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, this._historyClickHandler);
+    this.getElement()
+      .querySelector(`.film-card__controls-item--mark-as-watched`)
+      .addEventListener(`click`, this._historyClickHandler);
   }
 
   setFavoritesClickHandler(callback) {
     this._callback.favoritesClick = callback;
-    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, this._favoritesClickHandler);
+    this.getElement()
+      .querySelector(`.film-card__controls-item--favorite`)
+      .addEventListener(`click`, this._favoritesClickHandler);
   }
 
   getTemplate() {
@@ -75,9 +72,9 @@ export default class Film extends Abstract {
       return property ? `film-card__controls-item--active` : ``;
     };
 
-    // const checkDescription = (property) => {
-    //   return property ? `film-card__controls-item--active` : ``;
-    // };
+    const checkDescription = () => {
+      return description.length > MAX_DESCRIPTION_LENGTH ? `${description.slice(0, MAX_DESCRIPTION_LENGTH)}...` : description;
+    };
 
     return `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
@@ -88,7 +85,7 @@ export default class Film extends Abstract {
         <span class="film-card__genre">${genre.join(` `)}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
+      <p class="film-card__description">${checkDescription()}</p>
       <a class="film-card__comments">${comments.length} comments</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item

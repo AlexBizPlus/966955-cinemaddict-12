@@ -1,22 +1,19 @@
 import he from "he";
-// import {
-//   humanizeTaskDueDate
-// } from '../utils/films';
+import moment from 'moment';
+import SmartView from "./smart.js";
 import {
   EMOJIS
 } from "../const";
-import SmartView from "./smart.js";
-import moment from 'moment';
-// import { now } from 'moment';
-// import flatpickr from "flatpickr";
+import {
+  isCtrlEnterPressed
+} from "../utils/common";
 
-// import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 export default class Popup extends SmartView {
   constructor(film) {
     super();
     this._data = Popup.parseFilmToData(film);
-    this._closePopupHandler = this._closePopupHandler.bind(this);
 
+    this._closePopupHandler = this._closePopupHandler.bind(this);
     this._addWatchlistHandler = this._addWatchlistHandler.bind(this);
     this._addHistoryHandler = this._addHistoryHandler.bind(this);
     this._addFavoritesHandler = this._addFavoritesHandler.bind(this);
@@ -89,7 +86,7 @@ export default class Popup extends SmartView {
   }
 
   _addCommentHandler(evt) {
-    if ((evt.ctrlKey || evt.metaKey) && (evt.keyCode === 13 || evt.keyCode === 10)) {
+    if (isCtrlEnterPressed(evt)) {
       evt.preventDefault();
       const newComment = Object.assign({}, this._data.currentComment, {
         comment: evt.target.value,
@@ -135,6 +132,10 @@ export default class Popup extends SmartView {
       return result.join(` `);
     };
 
+    const checkGenres = () => {
+      return genre.length > 0 ? `Genres` : `Genre`;
+    };
+
     const createEmojisTemplate = (checkedEmoji) => {
       return EMOJIS.map((emoji) => `<input
       class="film-details__emoji-item visually-hidden"
@@ -168,7 +169,7 @@ export default class Popup extends SmartView {
           <img ${emojiTest}" width="55" height="55">
         </span>
         <div>
-          <p class="film-details__comment-text">${comments[i].comment}</p>
+          <p class="film-details__comment-text">${he.encode(comments[i].comment)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comments[i].author}</span>
             <span class="film-details__comment-day">${comments[i].day}</span>
@@ -235,7 +236,7 @@ export default class Popup extends SmartView {
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">Genres</td>
+              <td class="film-details__term">${checkGenres()}</td>
               <td class="film-details__cell">${renderGenres()}</td>
             </tr>
           </table>
@@ -287,10 +288,6 @@ export default class Popup extends SmartView {
       </form>
     </section>`;
   }
-
-  // reset(film) {
-  //   this.updateData(Popup.parseFilmToData(film));
-  // }
 
   static parseFilmToData(film) {
     return Object.assign({}, film);

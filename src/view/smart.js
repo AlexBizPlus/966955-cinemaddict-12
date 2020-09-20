@@ -1,8 +1,8 @@
 import Abstract from './abstract';
+import Api from "../api.js";
 import {
   BackendValues
 } from "../const";
-import Api from "../api.js";
 
 const api = new Api(BackendValues.END_POINT, BackendValues.AUTHORIZATION);
 export default class Smart extends Abstract {
@@ -30,14 +30,6 @@ export default class Smart extends Abstract {
       });
   }
 
-  // updateComments(update) {
-  //   if (!update) {
-  //     return;
-  //   }
-  //   this._data.comments.push(update);
-  //   this.updateElement();
-  // }
-
   deleteComment(number) {
     const id = number.split(`-`)[0];
     const index = number.split(`-`)[1];
@@ -48,14 +40,6 @@ export default class Smart extends Abstract {
         this.shake(this.updateElement.bind(this));
       });
   }
-
-  // deleteComment(index) {
-  //   this._data.comments = [
-  //     ...this._data.comments.slice(0, index),
-  //     ...this._data.comments.slice(index + 1)
-  //   ];
-  //   this.updateElement();
-  // }
 
   updateElement() {
     let prevElement = this.getElement();

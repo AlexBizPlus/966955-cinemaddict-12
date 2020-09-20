@@ -1,4 +1,5 @@
 import Abstract from './abstract';
+
 export default class ShowMoreButton extends Abstract {
   constructor() {
     super();
@@ -12,7 +13,8 @@ export default class ShowMoreButton extends Abstract {
 
   setClickHandler(callback) {
     this._callback.click = callback;
-    this.getElement().addEventListener(`click`, this._clickHandler);
+    this.getElement()
+      .addEventListener(`click`, this._clickHandler);
   }
 
   getTemplate() {
