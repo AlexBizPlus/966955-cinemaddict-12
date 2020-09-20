@@ -112,7 +112,6 @@ export default class Films extends Observer {
     return adaptedComments;
   }
 
-
   static adaptNewCommentsToClient(movieAndComments) {
     const comments = movieAndComments.comments;
     return Films.modyfyComments(comments);

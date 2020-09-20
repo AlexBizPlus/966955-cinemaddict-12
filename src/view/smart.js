@@ -49,14 +49,6 @@ export default class Smart extends Abstract {
       });
   }
 
-  // deleteComment(index) {
-  //   this._data.comments = [
-  //     ...this._data.comments.slice(0, index),
-  //     ...this._data.comments.slice(index + 1)
-  //   ];
-  //   this.updateElement();
-  // }
-
   updateElement() {
     let prevElement = this.getElement();
     const parent = prevElement.parentElement;

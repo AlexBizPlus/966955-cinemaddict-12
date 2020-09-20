@@ -55,6 +55,9 @@ export default class Filter extends Abstract {
 
     evt.preventDefault();
     this._callback.filterTypeChange(evt.target.dataset.filterType);
+    if (document.querySelector(`.main-navigation__additional`).classList.contains(`main-navigation__additional--active`)) {
+      document.querySelector(`.main-navigation__additional`).classList.remove(`main-navigation__additional--active`);
+    }
   }
 
   setFilterTypeChangeHandler(callback) {

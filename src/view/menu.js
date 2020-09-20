@@ -3,7 +3,7 @@ export default class Menu extends Abstract {
   constructor() {
     super();
 
-    this._statsClickHandler = this._statsClickHandler.bind(this);
+    // this._statsClickHandler = this._statsClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -12,13 +12,13 @@ export default class Menu extends Abstract {
     </nav>`;
   }
 
-  _statsClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.statsClickHandler();
-  }
+  // _statsClickHandler(evt) {
+  //   evt.preventDefault();
+  //   this._callback.statsClickHandler();
+  // }
 
-  setFilterTypeChangeHandler(callback) {
-    this._callback.statsClickHandler = callback;
-    this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, this._statsClickHandler);
-  }
+  // setFilterTypeChangeHandler(callback) {
+  //   this._callback.statsClickHandler = callback;
+  //   this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, this._statsClickHandler);
+  // }
 }

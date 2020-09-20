@@ -1,7 +1,7 @@
 import Abstract from './abstract';
-// import {
-//   humanizeTaskDueDate
-// } from '../utils/films';
+import {
+  MAX_DESCRIPTION_LENGTH
+} from '../const';
 export default class Film extends Abstract {
   constructor(film) {
     super();
@@ -75,9 +75,9 @@ export default class Film extends Abstract {
       return property ? `film-card__controls-item--active` : ``;
     };
 
-    // const checkDescription = (property) => {
-    //   return property ? `film-card__controls-item--active` : ``;
-    // };
+    const checkDescription = () => {
+      return description.length > MAX_DESCRIPTION_LENGTH ? `${description.slice(0, MAX_DESCRIPTION_LENGTH)}...` : description;
+    };
 
     return `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
@@ -88,7 +88,7 @@ export default class Film extends Abstract {
         <span class="film-card__genre">${genre.join(` `)}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
+      <p class="film-card__description">${checkDescription()}</p>
       <a class="film-card__comments">${comments.length} comments</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item
