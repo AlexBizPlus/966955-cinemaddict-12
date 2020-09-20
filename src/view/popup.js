@@ -125,7 +125,7 @@ export default class Popup extends SmartView {
     } = this._data;
 
     const renderGenres = () => {
-      let result = [];
+      const result = [];
       for (let i = 0; i < genre.length; i++) {
         result.push(`<span class="film-details__genre">${genre[i]}</span>`);
       }
@@ -157,7 +157,7 @@ export default class Popup extends SmartView {
     };
 
     const renderComments = () => {
-      let result = [];
+      const result = [];
       for (let i = 0; i < comments.length; i++) {
         const emojiTest = (comments[i].emoji === null)
           ? ``
