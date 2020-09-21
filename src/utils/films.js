@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from 'moment';
 
 const getWeightForNullDate = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
@@ -51,4 +51,21 @@ export const sortFilmById = (FilmA, FilmB) => {
     return weight;
   }
   return FilmA.id - FilmB.id;
+};
+
+export const checkTheSameProps = (prop, films) => {
+  const checkArray = [];
+  films.forEach((film) => {
+    if (films[0][prop] !== film[prop]) {
+      checkArray.push(`false`);
+    }
+    checkArray.push(`true`);
+    return;
+  });
+
+  const result = checkArray.findIndex((item) => item === `false`);
+  if (result >= 0) {
+    return false;
+  }
+  return true;
 };

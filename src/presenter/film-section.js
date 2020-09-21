@@ -22,8 +22,12 @@ import {
   sortFilmByDate,
   sortFilmByRating,
   sortFilmByComments,
-  sortFilmById
+  sortFilmById,
+  checkTheSameProps
 } from '../utils/films';
+import {
+  getNewRandomElement
+} from '../utils/common';
 import {
   header,
   footerStatContainer,
@@ -289,19 +293,31 @@ export default class FilmSection {
   }
 
   _renderFilmsExtra() {
-    render(this._filmsComponent, this._filmsListExtra);
-    render(this._filmsListExtra, this._filmsListExtraContainer);
+    if (this._filmsModel.getFilms().length > 0) {
+      render(this._filmsComponent, this._filmsListExtra);
+      render(this._filmsListExtra, this._filmsListExtraContainer);
 
-    const films = this._filmsModel.getFilms().slice().sort(sortFilmByRating).slice(0, FilmSettings.EXTRA_COUNT);
-    this._renderFilms(films, this._filmsListExtraContainer);
+      const films = this._filmsModel.getFilms().slice().sort(sortFilmByRating).slice(0, FilmSettings.EXTRA_COUNT);
+      if (checkTheSameProps(`totalRating`, this._filmsModel.getFilms().slice().sort(sortFilmByRating))) {
+        films = getNewRandomElement(this._filmsModel.getFilms().slice().sort(sortFilmByRating), FilmSettings.EXTRA_COUNT);
+      }
+
+      this._renderFilms(films, this._filmsListExtraContainer);
+    }
   }
 
   _renderFilmsMost() {
-    render(this._filmsComponent, this._filmsListMost);
-    render(this._filmsListMost, this._filmsListMostContainer);
+    if (this._filmsModel.getFilms().length > 0) {
+      render(this._filmsComponent, this._filmsListMost);
+      render(this._filmsListMost, this._filmsListMostContainer);
 
-    const films = this._filmsModel.getFilms().slice().sort(sortFilmByComments).slice(0, FilmSettings.MOST_COUNT);
-    this._renderFilms(films, this._filmsListMostContainer);
+      const films = this._filmsModel.getFilms().slice().sort(sortFilmByComments).slice(0, FilmSettings.MOST_COUNT);
+      if (checkTheSameProps(`totalRating`, this._filmsModel.getFilms().slice().sort(sortFilmByRating))) {
+        films = getNewRandomElement(this._filmsModel.getFilms().slice().sort(sortFilmByRating), FilmSettings.MOST_COUNT);
+      }
+
+      this._renderFilms(films, this._filmsListMostContainer);
+    }
   }
 
   _renderProfileRating() {

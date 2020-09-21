@@ -1,6 +1,6 @@
 import Film from '../view/film-card';
 import Popup from '../view/popup';
-import Api from "../api.js";
+import Api from "../api/index.js";
 import {
   isEscPressed
 } from "../utils/common";

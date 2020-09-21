@@ -1,5 +1,5 @@
 import Abstract from './abstract';
-import Api from "../api.js";
+import Api from "../api/index.js";
 import {
   BackendValues
 } from "../const";

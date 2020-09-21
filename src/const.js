@@ -59,7 +59,7 @@ export const Mode = {
 };
 
 export const BackendValues = {
-  AUTHORIZATION: `Basic 1294t55zer71q`,
+  AUTHORIZATION: `Basic 1294t55ze171q`,
   END_POINT: `https://12.ecmascript.pages.academy/cinemaddict`
 };
 

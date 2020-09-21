@@ -172,7 +172,7 @@ export default class Popup extends SmartView {
           <p class="film-details__comment-text">${he.encode(comments[i].comment)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comments[i].author}</span>
-            <span class="film-details__comment-day">${comments[i].day}</span>
+            <span class="film-details__comment-day">${moment(comments[i].day, `YYYY/MM/DD HH:mm`).fromNow()}</span>
             <button type="button" class="film-details__comment-delete" data-comment-number="${comments[i].id}-${i}">Delete</button>
           </p>
         </div>
