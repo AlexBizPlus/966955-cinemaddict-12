@@ -31,13 +31,11 @@ render(main, menu);
 
 const filterModel = new FilterModel();
 const filterPresenter = new FilterPresenter(menu, filterModel, filmsModel);
-// const filmSectionPresenter = new FilmSectionPresenter(main, filmsModel, filterModel, api);
 const filmSectionPresenter = new FilmSectionPresenter(main, filmsModel, filterModel, apiWithProvider);
 
 filterPresenter.init();
 filmSectionPresenter.init();
 
-// api.getFilms()
 apiWithProvider.getFilms()
   .then((films) => {
     filmsModel.setFilms(UpdateType.INIT, films);
@@ -51,9 +49,9 @@ apiWithProvider.getFilms()
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`/sw.js`)
     .then(() => {
-      console.log(`ServiceWorker available`); // eslint-disable-line
+      console.log(`ServiceWorker available`); // eslint-disable-line no-use-before-define
     }).catch(() => {
-      console.error(`ServiceWorker isn't available`); // eslint-disable-line
+      console.error(`ServiceWorker isn't available`); // eslint-disable-line no-use-before-define
     });
 });
 
