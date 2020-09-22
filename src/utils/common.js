@@ -21,19 +21,19 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-export const getRandomElement = (someArray) => {
-  const randomElement = getRandomInteger(0, someArray.length - 1);
-  return someArray[randomElement];
+export const getRandomElement = (items) => {
+  const randomElement = getRandomInteger(0, items.length - 1);
+  return items[randomElement];
 };
 
-export const getNewRandomElement = (someArray, count) => {
+export const getNewRandomElement = (items, count) => {
   const results = [];
-  const newArray = someArray.slice(``);
+  const newItems = items.slice(``);
 
   for (let i = 0; i < count; i++) {
-    const randomElement = getRandomElement(0, newArray.length - 1);
-    const index = newArray.findIndex((elem) => elem === randomElement);
-    const result = newArray.splice(index, 1)[0];
+    const randomElement = getRandomElement(0, newItems.length - 1);
+    const index = newItems.findIndex((elem) => elem === randomElement);
+    const result = newItems.splice(index, 1)[0];
     results.push(result);
   }
 

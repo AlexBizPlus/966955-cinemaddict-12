@@ -126,14 +126,14 @@ export default class Popup extends SmartView {
 
     const renderGenres = () => {
       const result = [];
-      for (let i = 0; i < genre.length; i++) {
-        result.push(`<span class="film-details__genre">${genre[i]}</span>`);
-      }
+      genre.forEach((element) => {
+        result.push(`<span class="film-details__genre">${element}</span>`);
+      });
       return result.join(` `);
     };
 
     const checkGenres = () => {
-      return genre.length > 0 ? `Genres` : `Genre`;
+      return genre.length > 1 ? `Genres` : `Genre`;
     };
 
     const createEmojisTemplate = (checkedEmoji) => {

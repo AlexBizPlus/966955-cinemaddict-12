@@ -1,4 +1,4 @@
-import Film from '../view/film-card';
+import Film from '../view/film';
 import Popup from '../view/popup';
 import Api from "../api/index.js";
 import {
@@ -72,7 +72,7 @@ export default class FilmCard {
     remove(prevFilmPopupComponent);
   }
 
-  _removefilmPopupComponent() {
+  _removeFilmPopupComponent() {
     remove(this._filmPopupComponent);
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;
@@ -81,7 +81,7 @@ export default class FilmCard {
   _escKeyDownHandler(evt) {
     if (isEscPressed(evt)) {
       evt.preventDefault();
-      this._removefilmPopupComponent();
+      this._removeFilmPopupComponent();
       this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film));
     }
   }
@@ -99,7 +99,7 @@ export default class FilmCard {
   }
 
   _handlePopupCloseClick(film) {
-    this._removefilmPopupComponent();
+    this._removeFilmPopupComponent();
     this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, film));
   }
 
@@ -128,7 +128,7 @@ export default class FilmCard {
 
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._removefilmPopupComponent();
+      this._removeFilmPopupComponent();
     }
   }
 }

@@ -1,6 +1,6 @@
 import Films from '../view/films';
 import FilmsList from '../view/films-list';
-import FilmsListContainer from '../view/films-container';
+import FilmsListContainer from '../view/films-list-container';
 import FilmsListExtra from '../view/films-list-extra';
 import FilmsListMost from '../view/films-list-most';
 import Sort from '../view/sort';

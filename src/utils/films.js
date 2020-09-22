@@ -54,16 +54,16 @@ export const sortFilmById = (FilmA, FilmB) => {
 };
 
 export const checkTheSameProps = (prop, films) => {
-  const checkArray = [];
+  const props = [];
   films.forEach((film) => {
     if (films[0][prop] !== film[prop]) {
-      checkArray.push(`false`);
+      props.push(`false`);
     }
-    checkArray.push(`true`);
+    props.push(`true`);
     return;
   });
 
-  const result = checkArray.findIndex((item) => item === `false`);
+  const result = props.findIndex((item) => item === `false`);
   if (result >= 0) {
     return false;
   }

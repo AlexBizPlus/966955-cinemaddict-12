@@ -69,8 +69,8 @@ export default class Films extends Observer {
     return adaptedFilm;
   }
 
-  static modyfyComments(commentsArray) {
-    const adaptedComments = commentsArray.map((element) => {
+  static modyfyComments(comments) {
+    const adaptedComments = comments.map((element) => {
       const newElement = Object.assign({}, element, {
         emoji: element.emotion,
         day: moment(new Date(element.date)).format(`YYYY/MM/DD HH:mm`)
@@ -89,9 +89,9 @@ export default class Films extends Observer {
     return Films.modyfyComments(comments);
   }
 
-  static adaptCommentsToClient(film, commentsArray) {
+  static adaptCommentsToClient(film, comments) {
     const adaptedFilm = Object.assign({}, film, {
-      comments: Films.modyfyComments(commentsArray)
+      comments: Films.modyfyComments(comments)
     });
 
     return adaptedFilm;
